@@ -1,0 +1,40 @@
+﻿@model IEnumerable<OnlineShop.Models.Product>
+@{
+    ViewBag.Title = "Catalog";
+}
+
+<table class="table">
+    <tr><th>Product Name</th><th>Cost</th><th></th></tr>
+    @foreach (var product in Model)
+    {
+        <tr>
+            <td>@product.Name</td>
+            <td>@product.Cost</td>
+            <td>
+                <button class="btn btn-sm btn-primary" data-product="@product.Id">
+                    Order
+                </button>
+            </td>
+        </tr>
+    }
+</table>
+
+<script>
+    $(".btn").on("click", function (e) {
+        $.ajax({
+            url: "Catalog/OrderProduct?id=" + $(e.target).data("product"),
+            type: "GET",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: (response) => {
+                if (response.success) {
+                    alert("Product was successfuly ordered!");
+                }
+                else {
+                    alert("Something went wront!");
+                }
+            },
+            error: () => alert("Something went wront!")
+        });
+    });
+</script>

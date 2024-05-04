@@ -1,0 +1,38 @@
+﻿@model OnlineShop.ViewModels.RegisterViewModel
+
+<div class="form d-flex flex-column align-items-center">
+    <h2 class="mb-5">Registration</h2>
+    <div class="inputs d-flex justify-content-center m-auto">
+        <form method="post" asp-controller="Account" asp-action="Register">
+            <div asp-validation-summary="ModelOnly"></div>
+            <div>
+                <label asp-for="UserName"></label><br />
+                <input class="txt" asp-for="UserName" />
+                <span asp-validation-for="UserName"></span>
+            </div>
+            <div>
+                <label asp-for="Email"></label><br />
+                <input class="txt" asp-for="Email" />
+                <span asp-validation-for="Email"></span>
+            </div>
+            <div>
+                <label asp-for="Year"></label><br />
+                <input class="txt" asp-for="Year" />
+                <span asp-validation-for="Year"></span>
+            </div>
+            <div>
+                <label asp-for="Password"></label><br />
+                <input class="txt" asp-for="Password" />
+                <span asp-validation-for="Password"></span>
+            </div>
+            <div>
+                <label asp-for="PasswordConfirm"></label><br />
+                <input class="txt" asp-for="PasswordConfirm" />
+                <span asp-validation-for="PasswordConfirm"></span>
+            </div>
+            <div>
+                <input type="submit" value="Register" />
+            </div>
+        </form>
+    </div>
+</div>

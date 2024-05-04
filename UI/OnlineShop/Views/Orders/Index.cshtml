@@ -1,0 +1,24 @@
+﻿@model IEnumerable<OnlineShop.ViewModels.OrderViewModel>
+@{
+    ViewBag.Title = "Orders List";
+}
+
+<table class="table">
+    <tr><th>Product Name</th><th>Product Cost</th><th>Order owner</th><th>Order email</th><th></th></tr>
+    @foreach (var order in Model)
+    {
+        <tr>
+            <td>@order.ProductName</td>
+            <td>@order.ProductCost</td>
+            <td>@order.ProductOwner</td>
+            <td>@order.OwnerEmail</td>
+            <td>
+                <form asp-action="Delete" asp-route-id="@order.Id" method="post">
+                    <button type="submit" class="btn btn-sm btn-danger">
+                        Delete
+                    </button>
+                </form>
+            </td>
+        </tr>
+    }
+</table>

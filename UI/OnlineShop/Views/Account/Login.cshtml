@@ -1,0 +1,30 @@
+﻿@model OnlineShop.ViewModels.LoginViewModel
+ 
+<div class="form d-flex flex-column align-items-center">
+    <h2 class="mb-5">Log in</h2>
+    <div class="inputs d-flex justify-content-center m-auto">
+        <form method="post" asp-controller="Account" asp-action="Login"
+              asp-route-returnUrl="@Model.ReturnUrl">
+            <div asp-validation-summary="ModelOnly"></div>
+            <div>
+                <label asp-for="UserName"></label><br />
+                <input class="txt" asp-for="UserName" />
+                <span asp-validation-for="UserName"></span>
+            </div>
+            <div>
+                <label asp-for="Password"></label><br />
+                <input class="txt" asp-for="Password" />
+                <span asp-validation-for="Password"></span>
+            </div>
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <label asp-for="RememberMe"></label><br />
+                    <input asp-for="RememberMe" />
+                </div>
+                <div>
+                    <input type="submit" value="Log in" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

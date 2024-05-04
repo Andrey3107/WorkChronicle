@@ -1,0 +1,20 @@
+﻿<ul class="navbar-nav nav-tabs">
+    @if (User.IsInRole("admin"))
+    {
+        <li class="nav-item">
+            <a class="nav-link" asp-area="" asp-controller="Users" asp-action="Index">Users</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" asp-area="" asp-controller="Roles" asp-action="Index">Roles</a>
+        </li>
+    }
+    @if (User.IsInRole("manager"))
+    {
+        <li class="nav-item">
+            <a class="nav-link" asp-area="" asp-controller="Catalog" asp-action="Catalog">Products</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" asp-area="" asp-controller="Orders" asp-action="Index">Orders</a>
+        </li>
+    }
+</ul>
