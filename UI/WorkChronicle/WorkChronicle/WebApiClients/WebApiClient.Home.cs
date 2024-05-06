@@ -14,15 +14,5 @@
         {
             return Get<List<TestTable>>("/Table/GetList");
         }
-
-        public Task<bool> CreateProjectAsync(CreateProjectViewMode viewModel)
-        {
-            return PostAsync<CreateProjectViewMode, bool>("/Project/CreateProject", viewModel);
-        }
-
-        public Task<List<Project>> GetAllProjects()
-        {
-            return GetAsync<List<Project>>("/Project/GetAll");
-        }
     }
 }

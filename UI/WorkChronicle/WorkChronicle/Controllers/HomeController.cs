@@ -23,19 +23,11 @@
             _logger = logger;
         }
 
-        public async Task<IActionResult> Index()
-        {
-            var projects = await webApiClient.GetAllProjects();
-            var viewModel = new ProjectListViewModel { Projects = projects };
-
-            return View(viewModel);
-        }
-
-        public IActionResult CreateProject()
+        public IActionResult Index()
         {
             return View();
         }
-
+        
         public IActionResult Privacy()
         {
             return View();
@@ -45,24 +37,6 @@
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> CreateProject(CreateProjectViewMode model)
-        {
-            if (ModelState.IsValid)
-            {
-                var result = await webApiClient.CreateProjectAsync(model);
-
-                if (result)
-                {
-                    return RedirectToAction("Index", "Home");
-                }
-
-                ModelState.AddModelError("", "Wrong password or login");
-            }
-
-            return View(model);
         }
     }
 }

@@ -49,7 +49,7 @@
             {
                 var loginRequestDto = new LoginRequestDto { Email = model.Email, Password = model.Password };
 
-                var result = await webApiClient.LoginAsync(loginRequestDto);
+                var result = await WebApiClient.LoginAsync(loginRequestDto);
 
                 if (result.IsSuccess)
                 {
@@ -90,7 +90,7 @@
                     Password = model.Password
                 };
 
-                var result = await webApiClient.RegisterAsync(registrationRequestDto);
+                var result = await WebApiClient.RegisterAsync(registrationRequestDto);
 
                 if (result.IsSuccess)
                 {

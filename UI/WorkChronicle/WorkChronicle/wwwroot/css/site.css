@@ -1,4 +1,6 @@
-﻿/* Sticky footer styles
+﻿@import url("Projects/projects.css");
+
+/* Sticky footer styles
 -------------------------------------------------- */
 html {
     font-size: 14px;
@@ -48,11 +50,6 @@ html {
     margin: 30px;
 }
 
-body {
-    background-image: url("../img/2.jpg");
-    background-size: cover;
-}
-
 .navbar {
     box-shadow: 0 5px 15px black;
 }
@@ -91,4 +88,8 @@ body {
     border: 1px solid #343a40;
     border-radius: 10px;
     margin: 10px 0px;
+}
+
+#page-title {
+    margin: auto;
 }
