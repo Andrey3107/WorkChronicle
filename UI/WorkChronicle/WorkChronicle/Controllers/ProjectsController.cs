@@ -17,7 +17,7 @@
 
         public async Task<IActionResult> Index()
         {
-            var projects = await WebApiClient.GetAllProjects();
+            var projects = await WebApiClient.GetAllProjects(false);
             var viewModel = new ProjectListViewModel { Projects = projects };
 
             return View(viewModel);

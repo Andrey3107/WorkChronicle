@@ -4,6 +4,7 @@
     using System.Linq;
 
     using CodeFirst;
+    using CodeFirst.Interfaces;
     using CodeFirst.Models;
 
     using Microsoft.AspNetCore.Authorization;
@@ -11,6 +12,11 @@
 
     public class HomeController : ApiControllerBase
     {
+        public HomeController(IUnitOfWork unitOfWork)
+            : base(unitOfWork)
+        {
+        }
+
         [HttpGet]
         [Authorize]
         public IActionResult GetList()
