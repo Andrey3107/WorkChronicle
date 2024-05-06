@@ -4,8 +4,8 @@
 
     public class CreateProjectViewMode
     {
-        [Required]
-        [Display(Name = "Project Name")]
+        //[Required]
+        //[Display(Name = "Project Name")]
         public string ProjectName { get; set; }
     }
 }
