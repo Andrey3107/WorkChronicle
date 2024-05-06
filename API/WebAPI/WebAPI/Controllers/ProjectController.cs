@@ -2,6 +2,7 @@
 {
     using System;
     using System.Data.Entity;
+    using System.Linq;
     using System.Threading.Tasks;
 
     using CodeFirst.Enums;
@@ -14,19 +15,47 @@
 
     public class ProjectController : ApiControllerBase
     {
-        private readonly IUnitOfWork unitOfWork;
-
-        public ProjectController(IUnitOfWork unitOfWork)
+        public ProjectController(IUnitOfWork UnitOfWork)
+            : base(UnitOfWork)
         {
-            this.unitOfWork = unitOfWork;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(bool onlyActive = false)
         {
-            using (unitOfWork.BeginTransaction(IsolationLevel.Snapshot))
+            using (UnitOfWork.BeginTransaction(IsolationLevel.Snapshot))
             {
-                var result = await unitOfWork.ProjectRepository.GetAsQueryable().ToListAsync();
+                var projectQuery = UnitOfWork.ProjectRepository.GetAsQueryable();
+
+                if (onlyActive)
+                {
+                    projectQuery = projectQuery.Where(x => x.ProjectStatusId == 1);
+                }
+
+                var result = await projectQuery.ToListAsync();
+
+                return Ok(result);
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetProjectsByUser(long userId)
+        {
+            using (UnitOfWork.BeginTransaction(IsolationLevel.Snapshot))
+            {
+                var projects = await UnitOfWork.ProjectRepository
+                    .GetAsQueryable()
+                    .Join(
+                        UnitOfWork.UserToProjectRepository.GetAsQueryable(),
+                        p => p.Id,
+                        u => u.ProjectId,
+                        (p, u) => new { p.Id, p.Name, p.ProjectStatusId, u.UserId } 
+                    )
+                    .Where(x => x.ProjectStatusId == 1 && x.UserId == userId)
+                    .Select(x => new { x.Id, x.Name })
+                    .ToListAsync();
+
+                var result = projects.Select(x => new Project { Id = x.Id, Name = x.Name }).ToList();
 
                 return Ok(result);
             }
@@ -35,9 +64,9 @@
         [HttpGet]
         public async Task<IActionResult> GetProjectById(long id)
         {
-            using (unitOfWork.BeginTransaction(IsolationLevel.Snapshot))
+            using (UnitOfWork.BeginTransaction(IsolationLevel.Snapshot))
             {
-                var result = await unitOfWork.ProjectRepository.GetAsQueryable().FirstOrDefaultAsync(x => x.Id == id);
+                var result = await UnitOfWork.ProjectRepository.GetAsQueryable().FirstOrDefaultAsync(x => x.Id == id);
 
                 return Ok(result);
             }
@@ -48,16 +77,16 @@
         {
             try
             {
-                using (var transaction = unitOfWork.BeginTransaction(IsolationLevel.ReadUncommitted))
+                using (var transaction = UnitOfWork.BeginTransaction(IsolationLevel.ReadUncommitted))
                 {
-                    var existingProject = await unitOfWork.ProjectRepository.GetAsQueryable().FirstOrDefaultAsync(x => x.Id == id);
+                    var existingProject = await UnitOfWork.ProjectRepository.GetAsQueryable().FirstOrDefaultAsync(x => x.Id == id);
 
                     if (existingProject == null) return Ok(false);
 
                     existingProject.ProjectStatusId = 2;
 
-                    unitOfWork.ProjectRepository.Update(existingProject);
-                    await unitOfWork.SaveAsync();
+                    UnitOfWork.ProjectRepository.Update(existingProject);
+                    await UnitOfWork.SaveAsync();
 
                     transaction.Commit();
 
@@ -75,16 +104,16 @@
         {
             try
             {
-                using (var transaction = unitOfWork.BeginTransaction(IsolationLevel.ReadUncommitted))
+                using (var transaction = UnitOfWork.BeginTransaction(IsolationLevel.ReadUncommitted))
                 {
-                    var existingProject = await unitOfWork.ProjectRepository.GetAsQueryable().FirstOrDefaultAsync(x => x.Id == id);
+                    var existingProject = await UnitOfWork.ProjectRepository.GetAsQueryable().FirstOrDefaultAsync(x => x.Id == id);
 
                     if (existingProject == null) return Ok(false);
 
                     existingProject.ProjectStatusId = 1;
 
-                    unitOfWork.ProjectRepository.Update(existingProject);
-                    await unitOfWork.SaveAsync();
+                    UnitOfWork.ProjectRepository.Update(existingProject);
+                    await UnitOfWork.SaveAsync();
 
                     transaction.Commit();
 
@@ -102,10 +131,27 @@
         {
             try
             {
-                using (var transaction = unitOfWork.BeginTransaction(IsolationLevel.ReadUncommitted))
+                using (var transaction = UnitOfWork.BeginTransaction(IsolationLevel.ReadUncommitted))
                 {
-                    unitOfWork.ProjectRepository.Delete(id);
-                    await unitOfWork.SaveAsync();
+                    var userToProject = await UnitOfWork.UserToProjectRepository
+                                            .GetAsQueryable()
+                                            .Where(x => x.ProjectId == id)
+                                            .ToListAsync();
+                    var ticket = await UnitOfWork.TicketRepository
+                                     .GetAsQueryable()
+                                     .Where(x => x.ProjectId == id)
+                                     .ToListAsync();
+
+                    var tickeIds = ticket.Select(x => x.Id).ToList();
+
+                    var timeTracks = await UnitOfWork.TimeTrackRepository.GetAsQueryable()
+                                         .Where(x => tickeIds.Contains(x.TicketId)).ToListAsync();
+
+                    UnitOfWork.TimeTrackRepository.Delete(timeTracks);
+                    UnitOfWork.TicketRepository.Delete(ticket);
+                    UnitOfWork.UserToProjectRepository.Delete(userToProject);
+                    UnitOfWork.ProjectRepository.Delete(id);
+                    await UnitOfWork.SaveAsync();
 
                     transaction.Commit();
 
@@ -128,10 +174,10 @@
                 ProjectStatusId = 1
             };
 
-            using (var transaction = unitOfWork.BeginTransaction(IsolationLevel.ReadUncommitted))
+            using (var transaction = UnitOfWork.BeginTransaction(IsolationLevel.ReadUncommitted))
             {
-                unitOfWork.ProjectRepository.Add(newProject);
-                await unitOfWork.SaveAsync();
+                UnitOfWork.ProjectRepository.Add(newProject);
+                await UnitOfWork.SaveAsync();
 
                 transaction.Commit();
 
@@ -144,16 +190,16 @@
         {
             try
             {
-                using (var transaction = unitOfWork.BeginTransaction(IsolationLevel.ReadUncommitted))
+                using (var transaction = UnitOfWork.BeginTransaction(IsolationLevel.ReadUncommitted))
                 {
-                    var existingProject = await unitOfWork.ProjectRepository.GetAsQueryable().FirstOrDefaultAsync(x => x.Id == project.Id);
+                    var existingProject = await UnitOfWork.ProjectRepository.GetAsQueryable().FirstOrDefaultAsync(x => x.Id == project.Id);
 
                     if (existingProject == null) return Ok(false);
 
                     existingProject.Name = project.Name;
 
-                    unitOfWork.ProjectRepository.Update(existingProject);
-                    await unitOfWork.SaveAsync();
+                    UnitOfWork.ProjectRepository.Update(existingProject);
+                    await UnitOfWork.SaveAsync();
 
                     transaction.Commit();
 

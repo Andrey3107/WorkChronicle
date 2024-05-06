@@ -1,7 +1,13 @@
 ﻿namespace WebAPI.Controllers
 {
+    using System.Data.Entity;
+    using System.Linq;
     using System.Net;
     using System.Threading.Tasks;
+
+    using CodeFirst.Enums;
+    using CodeFirst.Interfaces;
+    using CodeFirst.Models.Entities;
 
     using Microsoft.AspNetCore.Mvc;
 
@@ -14,9 +20,39 @@
     {
         private readonly IUserService userService;
 
-        public UserController(IUserService userService)
+        public UserController(IUnitOfWork unitOfWork, IUserService userService)
+            : base(unitOfWork)
         {
             this.userService = userService;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetUsersByProject(long projectId)
+        {
+            using (UnitOfWork.BeginTransaction(IsolationLevel.Snapshot))
+            {
+                var users = await UnitOfWork.ProjectRepository
+                                   .GetAsQueryable()
+                                   .Join(
+                                       UnitOfWork.UserToProjectRepository.GetAsQueryable(),
+                                       p => p.Id,
+                                       u => u.ProjectId,
+                                       (p, u) => new { ProjectId = p.Id, p.ProjectStatusId, u.UserId }
+                                   )
+                                   .Join(
+                                       UnitOfWork.UserRepository.GetAsQueryable(),
+                                       p => p.UserId,
+                                       u => u.Id,
+                                       (p, u) => new { p.ProjectId, p.ProjectStatusId, p.UserId, u.FirstName, u.LastName }
+                                    )
+                                   .Where(x => x.ProjectStatusId == 1 && x.ProjectId == projectId)
+                                   .Select(x => new { x.UserId, x.FirstName, x.LastName })
+                                   .ToListAsync();
+
+                var result = users.Select(x => new User { Id = x.UserId, FirstName = x.FirstName, LastName = x.LastName }).ToList();
+
+                return Ok(result);
+            }
         }
 
         [HttpPost]

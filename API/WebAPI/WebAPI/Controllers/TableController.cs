@@ -10,19 +10,17 @@
 
     public class TableController : ApiControllerBase
     {
-        private readonly IUnitOfWork unitOfWork;
-
         public TableController(IUnitOfWork unitOfWork)
+            : base(unitOfWork)
         {
-            this.unitOfWork = unitOfWork;
         }
 
         [HttpGet]
         public IActionResult GetList()
         {
-            using (unitOfWork.BeginTransaction(IsolationLevel.Snapshot))
+            using (UnitOfWork.BeginTransaction(IsolationLevel.Snapshot))
             {
-                var result = unitOfWork.TestTableRepository.GetAsQueryable().ToList();
+                var result = UnitOfWork.TestTableRepository.GetAsQueryable().ToList();
 
                 return Ok(result);
             }

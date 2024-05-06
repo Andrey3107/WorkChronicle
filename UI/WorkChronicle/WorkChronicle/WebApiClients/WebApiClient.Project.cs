@@ -14,11 +14,16 @@
             return PostAsync<CreateProjectViewMode, bool>("/Project/CreateProject", viewModel);
         }
 
-        public Task<List<Project>> GetAllProjects()
+        public Task<List<Project>> GetAllProjects(bool onlyActive)
         {
-            return GetAsync<List<Project>>("/Project/GetAll");
+            return GetAsync<List<Project>>($"/Project/GetAll?onlyActive={onlyActive}");
         }
 
+        public Task<List<Project>> GetProjectsByUser(long userId)
+        {
+            return GetAsync<List<Project>>($"/Project/GetProjectsByUser?userId={userId}");
+        }
+        
         public Task<Project> GetProjectById(long id)
         {
             return GetAsync<Project>($"/Project/GetProjectById?id={id}");
