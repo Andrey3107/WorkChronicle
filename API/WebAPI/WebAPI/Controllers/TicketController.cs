@@ -63,7 +63,7 @@
                     if (ticket == null)
                     {
                         return BadRequest();
-        }
+                    }
 
                     var result = new TicketModalViewModel
                     {
