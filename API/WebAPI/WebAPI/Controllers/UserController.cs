@@ -155,7 +155,7 @@
                     ErrorMessage = "User or password is incorrect"
                 };
 
-                return BadRequest(response);
+                return Ok(response);
             }
 
             response = new ApiResponse<LoginResponseDto>
