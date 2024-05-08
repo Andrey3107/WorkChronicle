@@ -7,6 +7,7 @@
     using Models.Tasks;
 
     using ViewModels;
+    using ViewModels.AccessManagement;
     using ViewModels.Tasks;
 
     public class Mapper : IMapper
@@ -25,9 +26,11 @@
         {
             return new Ticket
             {
+                Id = model.Id,
                 Name = model.TaskName,
                 Description = model.Description,
-                Created = DateTime.Now,
+                Created = model.StartDate,
+                DueDate = model.EndDate,
                 Estimate = model.Estimate,
                 TicketStatusId = model.TicketStatusId,
                 Completeness = model.Completeness,
@@ -35,6 +38,29 @@
                 TypeId = model.TicketTypeId,
                 PriorityId = model.PriorityId,
                 AssigneeId = model.AssigneeId
+            };
+        }
+
+        public UserViewModel MapUser(User model)
+        {
+            return new UserViewModel
+            {
+                Id = model.Id,
+                Email = model.Email,
+                FirstName = model.FirstName,
+                LastName = model.LastName
+            };
+        }
+
+        public TimeTrack Map(TimeTrackViewModel model, long assigneeId)
+        {
+            return new TimeTrack
+            {
+                Duration = model.Duration,
+                Comment = model.Comment,
+                TicketId = model.TicketId,
+                PlaceId = model.PlaceId,
+                AssigneeId = assigneeId
             };
         }
     }

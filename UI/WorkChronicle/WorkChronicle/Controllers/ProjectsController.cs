@@ -1,5 +1,6 @@
 ﻿namespace WorkChronicle.Controllers
 {
+    using System.Collections.Generic;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Authentication.OAuth.Claims;
@@ -7,6 +8,8 @@
     using Microsoft.Extensions.Configuration;
 
     using ViewModels;
+    using ViewModels.AccessManagement;
+    using ViewModels.Project;
 
     public class ProjectsController : BaseController
     {
@@ -26,6 +29,13 @@
         public IActionResult CreateProject()
         {
             return View();
+        }
+
+        public async Task<IActionResult> EditParticipants(long id)
+        {
+            var users = await WebApiClient.GetProjectUsers(id);
+
+            return View(users);
         }
 
         [HttpGet]
@@ -89,6 +99,16 @@
             var result = await WebApiClient.CreateProjectAsync(model);
 
             return Json(new { Success = result });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditParticipants(long projectId, List<long> users)
+        {
+            var filter = new ChangeParticipantsViewModel { ProjectId = projectId, ProjectUsers = users };
+
+            var success = await WebApiClient.ChangeProjectUsers(filter);
+
+            return RedirectToAction("Index");
         }
     }
 }

@@ -36,12 +36,6 @@
             return View();
         }
 
-        [HttpGet]
-        public IActionResult AccessManagement()
-        {
-            return View();
-        }
-
         [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> Login(LoginViewModel model)

@@ -1,6 +1,7 @@
 ﻿namespace WebAPI.Controllers
 {
     using System;
+    using System.Collections.Generic;
     using System.Data.Entity;
     using System.Linq;
     using System.Threading.Tasks;
@@ -12,6 +13,7 @@
     using Microsoft.AspNetCore.Mvc;
 
     using Models.Dto;
+    using Models.Project;
 
     public class ProjectController : ApiControllerBase
     {
@@ -127,6 +129,36 @@
         }
 
         [HttpGet]
+        public async Task<IActionResult> GetProjectUsers(long projectId)
+        {
+            using (UnitOfWork.BeginTransaction(IsolationLevel.Snapshot))
+            {
+                var allUsers = await UnitOfWork.UserRepository.GetAsQueryable().ToListAsync();
+
+                var project = await UnitOfWork.ProjectRepository
+                               .GetAsQueryable()
+                               .Where(x => x.Id == projectId)
+                               .FirstOrDefaultAsync();
+
+                var projectUsers = await UnitOfWork.UserToProjectRepository
+                                    .GetAsQueryable()
+                                    .Where(x => x.ProjectId == projectId)
+                                    .Include(x => x.User)
+                                    .ToListAsync();
+
+                var userViewModel = new ChangeParticipantsViewModel()
+                {
+                    ProjectId = project.Id,
+                    ProjectName = project.Name,
+                    AllUsers = allUsers,
+                    ProjectUsers = projectUsers.Count > 0 ? projectUsers.Select(y => y.User.Id).ToList() : new List<long>()
+                };
+
+                return Ok(userViewModel);
+            }
+        }
+
+        [HttpGet]
         public async Task<IActionResult> DeleteProject(long id)
         {
             try
@@ -207,6 +239,42 @@
                 }
             }
             catch (Exception ex)
+            {
+                return Ok(false);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangeProjectUsers(ChangeParticipantsViewModel filter)
+        {
+            try
+            {
+                using (var transaction = UnitOfWork.BeginTransaction(IsolationLevel.ReadUncommitted))
+                {
+                    var projectUsers = await UnitOfWork.UserToProjectRepository
+                                        .GetAsQueryable()
+                                        .Where(x => x.ProjectId == filter.ProjectId)
+                                        .Select(x => x.UserId)
+                                        .ToListAsync();
+
+                    var selectedProjectUsers = filter.ProjectUsers.ToList();
+
+                    var addedUsersId = selectedProjectUsers.Except(projectUsers).ToList();
+                    var removedUsersId = projectUsers.Except(selectedProjectUsers).ToList();
+
+                    var newUsers = addedUsersId.Select(x => new UserToProject() { ProjectId = filter.ProjectId, UserId = x }).ToList();
+
+                    UnitOfWork.UserToProjectRepository.Add(newUsers);
+                    UnitOfWork.UserToProjectRepository.Delete(x => removedUsersId.Contains(x.UserId) && x.ProjectId == filter.ProjectId);
+
+                    await UnitOfWork.SaveAsync();
+
+                    transaction.Commit();
+
+                    return Ok(true);
+                }
+            }
+            catch (Exception e)
             {
                 return Ok(false);
             }

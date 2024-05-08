@@ -6,6 +6,7 @@
     using CodeFirst.Models.Entities;
 
     using ViewModels;
+    using ViewModels.Project;
 
     public partial class WebApiClient
     {
@@ -47,6 +48,16 @@
         public Task<bool> DeleteProject(long id)
         {
             return GetAsync<bool>($"/Project/DeleteProject?id={id}");
+        }
+
+        public Task<ChangeParticipantsViewModel> GetProjectUsers(long projectId)
+        {
+            return GetAsync<ChangeParticipantsViewModel>($"/Project/GetProjectUsers?projectId={projectId}");
+        }
+
+        public Task<bool> ChangeProjectUsers(ChangeParticipantsViewModel filter)
+        {
+            return PostAsync<ChangeParticipantsViewModel, bool>("/Project/ChangeProjectUsers", filter);
         }
     }
 }

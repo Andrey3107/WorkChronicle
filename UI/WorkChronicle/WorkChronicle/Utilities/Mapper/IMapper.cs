@@ -5,6 +5,7 @@
     using Models.Tasks;
 
     using ViewModels;
+    using ViewModels.AccessManagement;
     using ViewModels.Tasks;
 
     public interface IMapper
@@ -14,5 +15,9 @@
         AssigneeModel Map(User user);
 
         Ticket Map(TaskViewModel model);
+
+        UserViewModel MapUser(User model);
+
+        TimeTrack Map(TimeTrackViewModel model, long assigneeId);
     }
 }

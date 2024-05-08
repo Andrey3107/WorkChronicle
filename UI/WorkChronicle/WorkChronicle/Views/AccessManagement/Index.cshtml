@@ -1,0 +1,28 @@
+﻿@model IEnumerable<WorkChronicle.ViewModels.AccessManagement.UserViewModel>
+
+
+<div class="row mt-4">
+    <h1 id="page-title">Access management</h1>
+</div>
+
+<div id="access-management-page" class="row">
+    <div class="col-12">
+
+        <div class="row mt-3" style="padding: 5px 0px;">
+            <div class="col-3"><b>User Name</b></div>
+            <div class="col-3"><b>Email</b></div>
+            <div class="col-6"></div>
+        </div>
+
+        @foreach (var user in Model)
+        {
+            <div class="row" style="border-top: 1px solid #d1d1d1; padding: 5px 0px;">
+                <div class="col-3">@($"{user.FirstName} {user.LastName}")</div>
+                <div class="col-3">@user.Email</div>
+                <div class="col-6 d-flex justify-content-end">
+                    <a class="btn btn-sm btn-primary btn-settings" asp-action="EditPermissions" asp-route-id="@user.Id">Permissions</a>
+                </div>
+            </div>
+        }
+    </div>
+</div>

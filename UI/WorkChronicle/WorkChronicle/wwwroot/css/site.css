@@ -1,6 +1,7 @@
 ﻿@import url("Projects/projects.css");
 
 @import url("Tasks/create-task.css");
+@import url("Tasks/task.css");
 
 /* Sticky footer styles
 -------------------------------------------------- */
@@ -90,6 +91,10 @@ html {
     border: 1px solid #343a40;
     border-radius: 10px;
     margin: 10px 0px;
+}
+
+#global-page {
+    margin-bottom: 70px;
 }
 
 #page-title {

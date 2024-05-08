@@ -24,9 +24,28 @@
             return View();
         }
 
-        public IActionResult CreateTask()
+        public IActionResult CreateTask(long? id = null)
         {
-            return View();
+            var task = new TicketViewModel();
+
+            if (id.HasValue)
+            {
+                task.Id = id.Value;
+            }
+
+            return View(task);
+        }
+
+        public IActionResult LogTime(long? ticketId)
+        {
+            var task = new TicketViewModel();
+
+            if (ticketId.HasValue)
+            {
+                task.Id = ticketId.Value;
+            }
+
+            return View(task);
         }
 
         [HttpGet]
@@ -52,6 +71,21 @@
             try
             {
                 var result = await WebApiClient.GetTicketTypes();
+
+                return Json(new { Success = true, Data = result });
+            }
+            catch (Exception e)
+            {
+                return Json(new { Success = false });
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetTaskById(long id)
+        {
+            try
+            {
+                var result = await WebApiClient.GetTicketById(id);
 
                 return Json(new { Success = true, Data = result });
             }
@@ -107,6 +141,53 @@
                 return Json(new { Success = false });
             }
         }
+        
+        [HttpGet]
+        public async Task<IActionResult> GetTicketsByUser()
+        {
+            try
+            {
+                var userIdExists = long.TryParse(User.Claims.FirstOrDefault(c => c.Type == "UserId")?.Value, out var userId);
+
+                var result = userIdExists ? await WebApiClient.GetTicketsByUser(userId) : new List<TicketViewModel>();
+
+                return Json(new { Success = true, Data = result });
+            }
+            catch (Exception e)
+            {
+                return Json(new { Success = false });
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetTicketDetailsById(long id)
+        {
+            try
+            {
+                var result = await WebApiClient.GetTicketDetailsById(id);
+
+                return Json(new { Success = true, Data = result });
+            }
+            catch (Exception e)
+            {
+                return Json(new { Success = false, ErrorMessage = "Something went wrong!" });
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetPlaces()
+        {
+            try
+            {
+                var result = await WebApiClient.GetPlaces();
+
+                return Json(new { Success = true, Data = result });
+            }
+            catch (Exception e)
+            {
+                return Json(new { Success = false });
+            }
+        }
 
         [HttpPost]
         public async Task<IActionResult> CreateTask(TaskViewModel model)
@@ -121,6 +202,35 @@
                 var ticket = Mapper.Map(model);
 
                 var success = await WebApiClient.CreateTicket(ticket);
+
+                if (success)
+                {
+                    return Json(new { Success = true });
+                }
+
+                return Json(new { Success = false, ErrorMessage = "Something went wrong!" });
+            }
+            catch (Exception e)
+            {
+                return Json(new { Success = false, ErrorMessage = "Something went wrong!" });
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateTimeTrack(TimeTrackViewModel model)
+        {
+            var userIdExists = long.TryParse(User.Claims.FirstOrDefault(c => c.Type == "UserId")?.Value, out var userId);
+
+            if (model == null || !userIdExists)
+            {
+                return Json(new { Success = false, ErrorMessage = "Input data cannot be null!" });
+            }
+
+            try
+            {
+                var timeTrack = Mapper.Map(model, userId);
+
+                var success = await WebApiClient.CreateTimeTrack(timeTrack);
 
                 if (success)
                 {

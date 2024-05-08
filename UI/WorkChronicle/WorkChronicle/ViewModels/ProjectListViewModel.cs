@@ -6,7 +6,7 @@
 
     public class ProjectListViewModel
     {
-        public List<Project> Projects { get; set; }
+        public List<CodeFirst.Models.Entities.Project> Projects { get; set; }
 
         public List<string> Tasks { get; set; }
     }
