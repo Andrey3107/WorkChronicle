@@ -1,5 +1,8 @@
 ﻿@import url("Projects/projects.css");
 
+@import url("Tasks/create-task.css");
+@import url("Tasks/task.css");
+
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
@@ -90,6 +93,14 @@ html {
     margin: 10px 0px;
 }
 
+#global-page {
+    margin-bottom: 70px;
+}
+
 #page-title {
-    margin: auto;
+    text-align: center;
+}
+
+.invalid-input {
+    border-color: #ea868f;
 }

@@ -1,6 +1,7 @@
 ﻿namespace WorkChronicle.Controllers
 {
     using System.Collections.Generic;
+    using System.Linq;
     using System.Security.Claims;
     using System.Threading.Tasks;
 
@@ -35,12 +36,6 @@
             return View();
         }
 
-        [HttpGet]
-        public IActionResult AccessManagement()
-        {
-            return View();
-        }
-
         [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> Login(LoginViewModel model)
@@ -50,13 +45,14 @@
                 var loginRequestDto = new LoginRequestDto { Email = model.Email, Password = model.Password };
 
                 var result = await WebApiClient.LoginAsync(loginRequestDto);
-
+                
                 if (result.IsSuccess)
                 {
                     await HttpContext.SignOutAsync();
 
                     var claims = new List<Claim>
                     {
+                        new Claim("UserId", $"{result.Result.User.Id}"),
                         new Claim(ClaimTypes.Name, $"{result.Result.User.FirstName} {result.Result.User.LastName}"),
                         new Claim(ClaimTypes.Role, result.Result.User.Role),
                         new Claim("Token", result.Result.Token)

@@ -1,0 +1,21 @@
+﻿@{
+    ViewData["Title"] = "Projects";
+}
+
+@model WorkChronicle.ViewModels.Project.ChangeParticipantsViewModel
+
+<div class="row mt-4">
+    <h1 id="page-title">Edit participants of @Model.ProjectName</h1>
+</div>
+
+<form asp-action="EditParticipants" method="post">
+    <input type="hidden" name="projectId" value="@Model.ProjectId" />
+
+    <div class="form-group">
+        @foreach (var user in Model.AllUsers)
+        {
+            <input type="checkbox" name="users" value="@user.Id" @(Model.ProjectUsers.Contains(user.Id) ? "checked=\"checked\"" : "") />@($"{user.FirstName} {user.LastName}") <br />
+        }
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>

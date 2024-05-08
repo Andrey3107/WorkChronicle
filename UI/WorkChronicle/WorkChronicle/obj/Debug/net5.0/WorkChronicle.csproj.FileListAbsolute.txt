@@ -44,10 +44,14 @@ E:\Andrey\БГАС(вышка)\Преддипломная практика\WorkC
 E:\Andrey\БГАС(вышка)\Преддипломная практика\WorkChronicle\UI\WorkChronicle\WorkChronicle\obj\Debug\net5.0\WorkChronicle.genruntimeconfig.cache
 E:\Andrey\БГАС(вышка)\Преддипломная практика\WorkChronicle\UI\WorkChronicle\WorkChronicle\obj\Debug\net5.0\Razor\Views\Account\Login.cshtml.g.cs
 E:\Andrey\БГАС(вышка)\Преддипломная практика\WorkChronicle\UI\WorkChronicle\WorkChronicle\obj\Debug\net5.0\Razor\Views\Account\Register.cshtml.g.cs
-E:\Andrey\БГАС(вышка)\Преддипломная практика\WorkChronicle\UI\WorkChronicle\WorkChronicle\obj\Debug\net5.0\Razor\Views\Account\AccessManagement.cshtml.g.cs
 E:\Andrey\БГАС(вышка)\Преддипломная практика\WorkChronicle\UI\WorkChronicle\WorkChronicle\obj\Debug\net5.0\Razor\Views\Shared\_LoginPartial.cshtml.g.cs
 E:\Andrey\БГАС(вышка)\Преддипломная практика\WorkChronicle\UI\WorkChronicle\WorkChronicle\obj\Debug\net5.0\Razor\Views\Analytics\Index.cshtml.g.cs
 E:\Andrey\БГАС(вышка)\Преддипломная практика\WorkChronicle\UI\WorkChronicle\WorkChronicle\obj\Debug\net5.0\Razor\Views\Projects\Index.cshtml.g.cs
 E:\Andrey\БГАС(вышка)\Преддипломная практика\WorkChronicle\UI\WorkChronicle\WorkChronicle\obj\Debug\net5.0\Razor\Views\Tasks\Index.cshtml.g.cs
 E:\Andrey\БГАС(вышка)\Преддипломная практика\WorkChronicle\UI\WorkChronicle\WorkChronicle\obj\Debug\net5.0\Razor\Views\Projects\CreateProject.cshtml.g.cs
 E:\Andrey\БГАС(вышка)\Преддипломная практика\WorkChronicle\UI\WorkChronicle\WorkChronicle\obj\Debug\net5.0\Razor\Views\Projects\EditProject.cshtml.g.cs
+E:\Andrey\БГАС(вышка)\Преддипломная практика\WorkChronicle\UI\WorkChronicle\WorkChronicle\obj\Debug\net5.0\Razor\Views\Tasks\CreateTask.cshtml.g.cs
+E:\Andrey\БГАС(вышка)\Преддипломная практика\WorkChronicle\UI\WorkChronicle\WorkChronicle\obj\Debug\net5.0\Razor\Views\AccessManagement\Index.cshtml.g.cs
+E:\Andrey\БГАС(вышка)\Преддипломная практика\WorkChronicle\UI\WorkChronicle\WorkChronicle\obj\Debug\net5.0\Razor\Views\AccessManagement\EditPermissions.cshtml.g.cs
+E:\Andrey\БГАС(вышка)\Преддипломная практика\WorkChronicle\UI\WorkChronicle\WorkChronicle\obj\Debug\net5.0\Razor\Views\Tasks\LogTime.cshtml.g.cs
+E:\Andrey\БГАС(вышка)\Преддипломная практика\WorkChronicle\UI\WorkChronicle\WorkChronicle\obj\Debug\net5.0\Razor\Views\Projects\EditParticipants.cshtml.g.cs

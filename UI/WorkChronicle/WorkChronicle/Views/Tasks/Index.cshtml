@@ -1,6 +1,138 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+    ViewData["Title"] = "Tasks";
 }
-<h1>Tasks</h1>
+@model WorkChronicle.ViewModels.ProjectListViewModel
+
+<div class="row mt-4">
+    <h1 id="page-title">Tasks</h1>
+</div>
+
+<div id="tasks-page" class="row">
+    <div class="col-12">
+        <a type="button" class="btn btn-sm btn-primary" asp-controller="Tasks" asp-action="CreateTask">
+            Add new Task
+        </a>
+    </div>
+
+    <div class="col-12 row mt-3">
+        <div id="new" class="col-4">
+            <div class="col-12 task-column">
+                <div class="column-header">New</div>
+                <div class="column-body">
+                </div>
+            </div>
+        </div>
+        <div id="in-progress" class="col-4">
+            <div class="col-12 task-column">
+                <div class="column-header">In progress</div>
+                <div class="column-body"></div>
+            </div>
+        </div>
+        <div id="resolved" class="col-4">
+            <div class="col-12 task-column">
+                <div class="column-header">Resolved</div>
+                <div class="column-body"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="task-modal" tabindex="-1" aria-labelledby="task-modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="task-modalLabel">Ticket</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" class="form-control" id="task-id">
+
+                <div class="row option">
+                    <div class="col-2">Project:</div>
+                    <div class="col-10"><span id="project-name-span">Test</span></div>
+                </div>
+
+                <div class="row option">
+                    <div class="col-2">Type:</div>
+                    <div class="col-10"><span id="ticket-type-span">Test</span></div>
+                </div>
+
+                <div class="row option">
+                    <div class="col-2">Status:</div>
+                    <div class="col-10"><span id="ticket-status-span">Test</span></div>
+                </div>
+
+                <div class="row option">
+                    <div class="col-2">Name:</div>
+                    <div class="col-10"><span id="ticket-name-span">Test</span></div>
+                </div>
+
+                <div class="row option">
+                    <div class="col-2">Description:</div>
+                    <div class="col-10"><span id="ticket-description-span">Test</span></div>
+                </div>
+
+                <div class="row option">
+                    <div class="col-6">
+                        <div class="row">
+                            <div class="col-4">Assignee:</div>
+                            <div class="col-8"><span id="assignee-span">Test</span></div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="row">
+                            <div class="col-6">Start date:</div>
+                            <div class="col-6"><span id="start-date-span">Test</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row option">
+                    <div class="col-6">
+                        <div class="row">
+                            <div class="col-4">Priority:</div>
+                            <div class="col-8"><span id="priority-span">Test</span></div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="row">
+                            <div class="col-6">End date:</div>
+                            <div class="col-6"><span id="end-date-span">Test</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row option">
+                    <div class="col-6">
+                        <div class="row">
+                            <div class="col-4">Completeness:</div>
+                            <div class="col-8"><span id="completeness-span">Test</span></div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="row">
+                            <div class="col-6">Estimated time:</div>
+                            <div class="col-6"><span id="estimate-span">Test</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row option">
+                    <div class="col-2">Spent time:</div>
+                    <div class="col-10"><span id="spent-time-span">Test</span></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="btn-log-time" type="button" class="btn btn-primary">Log time</button>
+                <button id="btn-edit-ticket" type="button" class="btn btn-primary">Edit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        const page = new Tasks();
+        page.Init();
+    });
+</script>
