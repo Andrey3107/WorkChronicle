@@ -84,11 +84,11 @@
 
     InitModalButtons() {
         $("#btn-edit-ticket").on("click", () => {
-            window.location.href = "/Tasks/CreateTask?id=" + $("#task-modal").find("#task-id").val();;
+            window.location.href = "/Tasks/CreateTask?id=" + $("#task-modal").find("#task-id").val();
         });
 
         $("#btn-log-time").on("click", () => {
-            window.location.href = "/Tasks/LogTime?ticketId=" + $("#task-modal").find("#task-id").val();;
+            window.location.href = "/Tasks/LogTime?ticketId=" + $("#task-modal").find("#task-id").val();
         });
     }
 
