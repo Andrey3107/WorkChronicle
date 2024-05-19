@@ -3,6 +3,8 @@
 @import url("Tasks/create-task.css");
 @import url("Tasks/task.css");
 
+@import url("Profile/profile.css");
+
 /* Sticky footer styles
 -------------------------------------------------- */
 html {

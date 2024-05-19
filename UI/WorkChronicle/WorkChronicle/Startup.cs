@@ -1,5 +1,7 @@
 namespace WorkChronicle
 {
+    using System;
+
     using Microsoft.AspNetCore.Authentication.Cookies;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -25,6 +27,7 @@ namespace WorkChronicle
             {
                 options.Cookie.Name = "MyAppCookie";
                 options.LoginPath = "/Account/Login";
+                options.ExpireTimeSpan = TimeSpan.FromHours(2);
             });
         }
 

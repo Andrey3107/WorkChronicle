@@ -1,0 +1,73 @@
+﻿@{
+    ViewData["Title"] = "Profile";
+}
+
+<div class="row mt-4">
+    <h1 id="page-title">User profile</h1>
+</div>
+
+<div id="profile-page">
+    <div class="section">
+        <div class="block-title">General info</div>
+        <div class="block-content">
+            <div class="row">
+                <div class="col-3">First name:</div>
+                <div class="col-9">
+                    <div id="first-name-readable" class="readable"></div>
+                    <input id="first-name-writeable" class="writeable form-control" type="text" style="display: none;" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-3">Last name:</div>
+                <div class="col-9">
+                    <div id="last-name-readable" class="readable"></div>
+                    <input id="last-name-writeable" class="writeable form-control" type="text" style="display: none;" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-3">Email:</div>
+                <div class="col-9">
+                    <div id="email-readable" class="readable"></div>
+                    <input id="email-writeable" class="writeable form-control" type="text" style="display: none;" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="change-password-section" class="section" style="display: none;">
+        <div class="block-title">Change password</div>
+        <div class="block-content">
+            <div class="row">
+                <div class="col-3">Old password:</div>
+                <div class="col-9">
+                    <input id="old-password" class="form-control" type="text" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-3">New password:</div>
+                <div class="col-9">
+                    <input id="new-password" class="form-control" type="text" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-3">Confirm new password:</div>
+                <div class="col-9">
+                    <input id="confirm-password" class="form-control" type="text" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button id="save-profile-info" class="btn btn-sm btn-primary" style="display: none;">Save</button>
+    <button id="change-password" class="btn btn-sm btn-primary" style="display: none;">Change password</button>
+    <button id="btn-back" class="btn btn-sm btn-primary" style="display: none;">Back</button>
+    <button id="edit-profile-info" class="btn btn-sm btn-primary">Edit</button>
+</div>
+
+<script>
+    $(document).ready(function () {
+        const page = new Profile();
+        page.Init();
+    });
+</script>
