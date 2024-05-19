@@ -1,5 +1,6 @@
 ﻿namespace WorkChronicle.Controllers
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Security.Claims;
@@ -12,6 +13,7 @@
     using Microsoft.Extensions.Configuration;
 
     using Models;
+    using Models.Profile;
 
     using ViewModels;
 
@@ -34,6 +36,75 @@
         public IActionResult Register()
         {
             return View();
+        }
+
+        [HttpGet]
+        public IActionResult Profile()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetUserById()
+        {
+            var userIdExists = long.TryParse(User.Claims.FirstOrDefault(c => c.Type == "UserId")?.Value, out var userId);
+
+            var userInfo = userIdExists ? await WebApiClient.GetUserById(userId) : null;
+
+            return Json(new { Success = true, Data = userInfo });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(ChangePassword model)
+        {
+            try
+            {
+                var userIdExists = long.TryParse(User.Claims.FirstOrDefault(c => c.Type == "UserId")?.Value, out var userId);
+
+                model.UserId = userId;
+
+                if (!userIdExists)
+                {
+                    return Json(new { Success = false, ErrorMessage = "Cannot find user!" });
+                }
+
+                var result = await WebApiClient.ChangePassword(model);
+
+                if (result)
+                {
+                    return Json(new { Success = true });
+                }
+
+                return Json(new { Success = false, ErrorMessage = "Wrong password!" });
+            }
+            catch (Exception e)
+            {
+                return Json(new { Success = false, ErrorMessage = "Something went wrong!" });
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateProfile(UpdateProfile model)
+        {
+            try
+            {
+                var userIdExists = long.TryParse(User.Claims.FirstOrDefault(c => c.Type == "UserId")?.Value, out var userId);
+
+                model.UserId = userId;
+
+                if (!userIdExists)
+                {
+                    return Json(new { Success = false, ErrorMessage = "Cannot find user!" });
+                }
+
+                var result = await WebApiClient.UpdateUserInfo(model);
+
+                return Json(new { Success = result });
+            }
+            catch (Exception e)
+            {
+                return Json(new { Success = false, ErrorMessage = "Something went wrong!" });
+            }
         }
 
         [HttpPost]

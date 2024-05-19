@@ -16,6 +16,7 @@
     using Models;
     using Models.AccessManagement;
     using Models.Dto;
+    using Models.User;
 
     using Services.Interfaces;
 
@@ -37,6 +38,17 @@
                 var users = await UnitOfWork.UserRepository.GetAsQueryable().ToListAsync();
 
                 return Ok(users);
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetUserById(long userId)
+        {
+            using (UnitOfWork.BeginTransaction(IsolationLevel.Snapshot))
+            {
+                var user = await UnitOfWork.UserRepository.GetAsQueryable().Where(x => x.Id == userId).FirstOrDefaultAsync();
+
+                return Ok(user);
             }
         }
 
@@ -96,6 +108,60 @@
                 var result = users.Select(x => new User { Id = x.UserId, FirstName = x.FirstName, LastName = x.LastName }).ToList();
 
                 return Ok(result);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateUserInfo(UpdateProfile model)
+        {
+            try
+            {
+                using (var transaction = UnitOfWork.BeginTransaction(IsolationLevel.ReadUncommitted))
+                {
+                    var existingUser = UnitOfWork.UserRepository.Get(x => x.Id == model.UserId).FirstOrDefault();
+
+                    if (existingUser == null) return Ok(false);
+
+                    existingUser.FirstName = model.FirstName;
+                    existingUser.LastName = model.LastName;
+                    existingUser.Email = model.Email;
+
+                    await UnitOfWork.SaveAsync();
+
+                    transaction.Commit();
+
+                    return Ok(true);
+                }
+            }
+            catch (Exception e)
+            {
+                return Ok(false);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(ChangePassword model)
+        {
+            try
+            {
+                using (var transaction = UnitOfWork.BeginTransaction(IsolationLevel.ReadUncommitted))
+                {
+                    var existingUser = UnitOfWork.UserRepository.Get(x => x.Id == model.UserId).FirstOrDefault();
+
+                    if (existingUser == null || existingUser.Password != model.OldPassword || model.NewPassword != model.ConfirmPassword) return Ok(false);
+
+                    existingUser.Password = model.NewPassword;
+
+                    await UnitOfWork.SaveAsync();
+
+                    transaction.Commit();
+
+                    return Ok(true);
+                }
+            }
+            catch (Exception e)
+            {
+                return Ok(false);
             }
         }
 

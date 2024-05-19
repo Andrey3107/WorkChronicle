@@ -1,0 +1,13 @@
+﻿#profile-page .block-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-block-end: 10px;
+}
+
+#profile-page .section {
+    margin-block-end: 15px;
+}
+
+#profile-page .section .row {
+    margin-block: 10px;
+}
