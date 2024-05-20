@@ -11,10 +11,12 @@
     <link rel="stylesheet" href="~/css/site.css" />
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="/js/Utilities/dropdown.js"></script>
+    <script src="/js/Utilities/highcharts.js"></script>
     <script src="/js/Pages/Tasks/create-tasks.js"></script>
     <script src="/js/Pages/Tasks/tasks.js"></script>
     <script src="/js/Pages/Tasks/log-time.js"></script>
     <script src="/js/Pages/Account/profile.js"></script>
+    <script src="/js/Pages/Analytics/analytics.js"></script>
 </head>
 <body>
 
@@ -43,9 +45,12 @@
                             <li class="nav-item">
                                 <a class="nav-link" asp-area="" asp-controller="Tasks" asp-action="Index">Tasks</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Analytics" asp-action="Index">Analytics</a>
-                            </li>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="Analytics" asp-action="Index">Analytics</a>
+                                </li>
+                            }
                         </ul>
                     }
                     else

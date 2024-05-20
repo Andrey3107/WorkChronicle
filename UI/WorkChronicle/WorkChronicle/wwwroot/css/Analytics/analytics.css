@@ -1,0 +1,14 @@
+﻿#analytics-page #filters {
+    margin-block: 24px;
+}
+
+#analytics-page .option {
+    display: flex;
+    align-items: center; 
+}
+
+#analytics-page #update-chart{
+    width: 100px;
+    margin-left: auto;
+    margin-right: 13px;
+}

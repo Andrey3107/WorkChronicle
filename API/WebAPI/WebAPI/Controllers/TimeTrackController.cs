@@ -26,6 +26,7 @@
 
             using (var transaction = UnitOfWork.BeginTransaction(IsolationLevel.ReadUncommitted))
             {
+                timerTrack.Created = DateTime.Now;
                 var result = UnitOfWork.TimeTrackRepository.AddOrUpdate(timerTrack);
                 await UnitOfWork.SaveAsync();
 

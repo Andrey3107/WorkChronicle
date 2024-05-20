@@ -1,5 +1,7 @@
 ﻿namespace CodeFirst.Models.Entities
 {
+    using System;
+
     public class TimeTrack : IEntity<long>
     {
         public long Id { get; set; }
@@ -13,6 +15,8 @@
         public int? PlaceId { get; set; }
 
         public long AssigneeId { get; set; }
+
+        public DateTime? Created { get; set; }
 
         #region Navigation properties
 
